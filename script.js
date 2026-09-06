@@ -419,63 +419,7 @@ if (projectsSection) {
     projectsObserver.observe(projectsSection);
 }
 
-// Contact Section
 
-emailjs.init({
-    publicKey: "kdZ6vtz_3YPONg2EM"
-});
-
-const contactForm = document.getElementById("contactForm");
-const formMessage = document.getElementById("formMessage");
-
-if (contactForm) {
-
-    contactForm.addEventListener("submit", function(event) {
-
-        event.preventDefault();
-
-        const name = document.getElementById("name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const subject = document.getElementById("subject").value.trim();
-        const message = document.getElementById("message").value.trim();
-
-        if (name === "" || email === "" || subject === "" || message === "") {
-            formMessage.textContent = "Please fill in all the fields.";
-            return;
-        }
-
-        if (!email.includes("@") || !email.includes(".")) {
-            formMessage.textContent = "Please enter a valid email address.";
-            return;
-        }
-
-        formMessage.textContent = "Sending message...";
-
-        emailjs.sendForm(
-            "service_ojtu02h",
-            "template_622z6ls",
-            contactForm
-        )
-        .then(function() {
-
-            formMessage.textContent =
-                "Thank you! Your message has been sent successfully.";
-
-            contactForm.reset();
-
-        })
-        .catch(function(error) {
-
-            formMessage.textContent =
-                "Sorry, something went wrong. Please try again.";
-
-            console.log("EmailJS Error:", error);
-
-        });
-
-    });
-
-}
 
 
 
