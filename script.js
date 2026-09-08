@@ -1,10 +1,12 @@
 // HEADER
+
 /* Sticky Header Scroll Effect */
 const header = document.querySelector("header");
+
 window.addEventListener("scroll", () => {
-    if(window.scrollY > 20){
+    if (window.scrollY > 20) {
         header.classList.add("scrolled");
-    }else{
+    } else {
         header.classList.remove("scrolled");
     }
 });
@@ -12,12 +14,14 @@ window.addEventListener("scroll", () => {
 /* Mobile Menu */
 const menuIcon = document.querySelector("#menu-icon");
 const navList = document.querySelector(".navlist");
+
 menuIcon.addEventListener("click", () => {
     navList.classList.toggle("active");
 });
 
 /* Close Menu When Link Is Clicked */
 const navLinks = document.querySelectorAll(".navlist a");
+
 navLinks.forEach(link => {
     link.addEventListener("click", () => {
         navList.classList.remove("active");
@@ -26,10 +30,14 @@ navLinks.forEach(link => {
 
 
 // HOME
+
+/* Text Animation */
 let words = document.querySelectorAll(".word");
+
 words.forEach((word) => {
     let letters = word.textContent.split("");
     word.textContent = "";
+
     letters.forEach((letter) => {
         let span = document.createElement("span");
         span.textContent = letter;
@@ -80,18 +88,27 @@ let changeText = () => {
 
 setInterval(changeText, 3000);
 
-// SKILLS
-/* Skills Filter */
+/* Initial Page Load Animation */
+const homeContent = document.querySelector(".home-content");
+const homeImage = document.querySelector(".home-image");
 
+window.addEventListener("load", () => {
+    homeContent.classList.add("show");
+    homeImage.classList.add("show");
+});
+
+
+// SKILLS
+
+/* Skills Filter */
 const skillTabs = document.querySelectorAll(".filter-tabs .tab");
 const skillPanels = document.querySelectorAll(".skill-panel");
 const allSkillsView = document.getElementById("allSkillsView");
 const skillPills = document.querySelectorAll(".tool-pill");
 const skillsGrid = document.getElementById("skillsGrid");
 
-
+/* Show All Skills */
 function showAllSkills() {
-
     allSkillsView.style.display = "flex";
 
     skillsGrid.classList.remove("single-visible");
@@ -106,43 +123,34 @@ function showAllSkills() {
     });
 }
 
-
+/* Show Selected Skill Category */
 function showCategory(category) {
-
     skillsGrid.classList.add("single-visible");
+
     allSkillsView.classList.remove("visible");
     allSkillsView.style.display = "none";
 
     skillPanels.forEach((panel) => {
-
         const panelCategory = panel.dataset.category;
 
         if (panelCategory === category) {
-
             panel.classList.remove("hidden-panel");
 
             requestAnimationFrame(() => {
                 panel.classList.add("visible");
             });
-
         } else {
-
             panel.classList.remove("visible");
             panel.classList.add("hidden-panel");
-
         }
-
     });
 
-
     /* Animate Progress Bars */
-
     const activePanel = document.querySelector(
         `.skill-panel[data-category="${category}"]`
     );
 
     if (activePanel) {
-
         const bars = activePanel.querySelectorAll(".bar");
 
         bars.forEach((bar) => {
@@ -150,29 +158,20 @@ function showCategory(category) {
         });
 
         requestAnimationFrame(() => {
-
             bars.forEach((bar) => {
-
                 const level = bar.dataset.level;
 
                 setTimeout(() => {
                     bar.style.width = `${level}%`;
                 }, 150);
-
             });
-
         });
-
     }
 }
 
-
 /* Filter Tab Click */
-
 skillTabs.forEach((tab) => {
-
     tab.addEventListener("click", () => {
-
         skillTabs.forEach((item) => {
             item.classList.remove("active");
         });
@@ -186,75 +185,66 @@ skillTabs.forEach((tab) => {
         } else {
             showCategory(filter);
         }
-
     });
-
 });
 
-
-/*ALL VIEW → CATEGORY NAVIGATION*/
-
+/* All View → Category Navigation */
 skillPills.forEach((pill) => {
-
     pill.addEventListener("click", () => {
-
         const category = pill.dataset.skill;
 
         if (!category) {
             return;
         }
 
-
-        /* Find the corresponding filter button */
-
+        /* Find the Corresponding Filter Button */
         const targetTab = document.querySelector(
             `.filter-tabs .tab[data-filter="${category}"]`
         );
 
-
         if (targetTab) {
-
-            /* Activate the category */
-
+            /* Activate the Category */
             skillTabs.forEach((tab) => {
                 tab.classList.remove("active");
             });
 
             targetTab.classList.add("active");
 
-
-            /* Show the category */
-
+            /* Show the Category */
             showCategory(category);
 
-
-            /* Scroll to Skills section */
-
+            /* Scroll to Skills Section */
             document.getElementById("skills").scrollIntoView({
                 behavior: "smooth",
                 block: "start"
             });
-
         }
-
     });
-
 });
 
 /* Initial State */
-
 showAllSkills();
 
-/* Scroll Animation */
-const homeContent = document.querySelector(".home-content");
-const homeImage = document.querySelector(".home-image");
+/* Skills Scroll Animation */
+const skillsSection = document.querySelector("#skills");
 
-window.addEventListener("load", () => {
-    homeContent.classList.add("show");
-    homeImage.classList.add("show");
+const skillsObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            skillsSection.classList.add("show");
+        } else {
+            skillsSection.classList.remove("show");
+        }
+    });
+}, {
+    threshold: 0.2
 });
 
+skillsObserver.observe(skillsSection);
+
+
 // ABOUT
+
 /* About Scroll Animation */
 const aboutSection = document.querySelector("#about");
 const aboutImage = document.querySelector(".img-about");
@@ -270,127 +260,108 @@ const aboutObserver = new IntersectionObserver((entries) => {
             aboutContent.classList.remove("show");
         }
     });
-},{threshold:0.2});
+}, {
+    threshold: 0.2
+});
 
 aboutObserver.observe(aboutSection);
 
-//read more
+/* Read More */
 const readMoreBtn = document.getElementById("readMoreBtn");
 const aboutDetails = document.getElementById("aboutDetails");
 const readMoreTooltip = document.getElementById("readMoreTooltip");
 
 if (readMoreBtn && aboutDetails) {
-    readMoreBtn.addEventListener("click", function (event) {
+    readMoreBtn.addEventListener("click", function(event) {
         event.preventDefault();
 
         const isOpen = aboutDetails.classList.toggle("show");
 
         if (isOpen) {
             readMoreBtn.textContent = "Read Less!";
+
             if (readMoreTooltip) {
                 readMoreTooltip.classList.add("hide");
             }
         } else {
             readMoreBtn.textContent = "Read More!";
+
             if (readMoreTooltip) {
                 readMoreTooltip.classList.remove("hide");
             }
+
             const aboutSec = document.getElementById("about");
+
             if (aboutSec) {
-                aboutSec.scrollIntoView({ behavior: "smooth", block: "start" });
+                aboutSec.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
             }
         }
     });
 
     if (readMoreTooltip) {
-        readMoreTooltip.addEventListener("click", function () {
+        readMoreTooltip.addEventListener("click", function() {
             readMoreBtn.click();
         });
     }
 }
 
-/* Skills Scroll Animation */
-const skillsSection = document.querySelector("#skills");
 
-const skillsObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-            skillsSection.classList.add("show");
-        } else {
-            skillsSection.classList.remove("show");
-        }
-    });
-},{threshold:0.2});
+// PROJECTS
 
-skillsObserver.observe(skillsSection);
-
-// Project Section
-// Get all filter buttons
+/* Project Filter Buttons */
 const filterButtons = document.querySelectorAll(".filter-btn");
 
-// Get all project cards
+/* Project Cards */
 const projectCards = document.querySelectorAll(".project-card");
 
-// Add click event to each filter button
-filterButtons.forEach(function(button) {
+// /* Project Filter */
+// filterButtons.forEach(function(button) {
+//     button.addEventListener("click", function() {
+//         /* Get the Selected Category */
+//         const selectedFilter = button.dataset.filter;
 
-    button.addEventListener("click", function() {
+//         /* Remove Active Class from All Buttons */
+//         filterButtons.forEach(function(btn) {
+//             btn.classList.remove("active");
+//         });
 
-        // Get the selected category
-        const selectedFilter = button.dataset.filter;
+//         /* Add Active Class to the Clicked Button */
+//         button.classList.add("active");
 
-        // Remove active class from all buttons
-        filterButtons.forEach(function(btn) {
-            btn.classList.remove("active");
-        });
+//         /* Show or Hide Project Cards */
+//         projectCards.forEach(function(card) {
+//             const projectCategories = card.dataset.category;
 
-        // Add active class to the clicked button
-        button.classList.add("active");
+//             if (
+//                 selectedFilter === "all" ||
+//                 projectCategories.includes(selectedFilter)
+//             ) {
+//                 card.classList.remove("hide");
+//             } else {
+//                 card.classList.add("hide");
+//             }
+//         });
+//     });
+// });
 
-        // Show or hide project cards
-        projectCards.forEach(function(card) {
-
-            const projectCategories = card.dataset.category;
-
-            if (
-                selectedFilter === "all" ||
-                projectCategories.includes(selectedFilter)
-            ) {
-                card.classList.remove("hide");
-            } else {
-                card.classList.add("hide");
-            }
-
-        });
-
-    });
-
-});
-
-// =========================================================
-// PROJECTS - SCROLL REVEAL
-
-
+/* Projects Scroll Reveal */
 const projectsSection = document.querySelector(".projects");
 
 if (projectsSection) {
-
     const projectsObserver = new IntersectionObserver(
         function(entries, observer) {
-
             entries.forEach(function(entry) {
-
                 if (entry.isIntersecting) {
-
-                    // Start the animation
+                    /* Start the Animation */
                     projectsSection.classList.add("projects-visible");
 
-                    // Animate only once
+                    /* Animate Only Once */
                     observer.unobserve(projectsSection);
                 }
-
             });
-
         },
         {
             threshold: 0.15
@@ -399,8 +370,11 @@ if (projectsSection) {
 
     projectsObserver.observe(projectsSection);
 }
-// Contact Section
 
+
+// CONTACT
+
+/* EmailJS Initialization */
 emailjs.init({
     publicKey: "kdZ6vtz_3YPONg2EM"
 });
@@ -409,9 +383,7 @@ const contactForm = document.getElementById("contactForm");
 const formMessage = document.getElementById("formMessage");
 
 if (contactForm) {
-
     contactForm.addEventListener("submit", function(event) {
-
         event.preventDefault();
 
         const name = document.getElementById("name").value.trim();
@@ -419,11 +391,18 @@ if (contactForm) {
         const subject = document.getElementById("subject").value.trim();
         const message = document.getElementById("message").value.trim();
 
-        if (name === "" || email === "" || subject === "" || message === "") {
+        /* Check Empty Fields */
+        if (
+            name === "" ||
+            email === "" ||
+            subject === "" ||
+            message === ""
+        ) {
             formMessage.textContent = "Please fill in all the fields.";
             return;
         }
 
+        /* Check Email Format */
         if (!email.includes("@") || !email.includes(".")) {
             formMessage.textContent = "Please enter a valid email address.";
             return;
@@ -431,55 +410,41 @@ if (contactForm) {
 
         formMessage.textContent = "Sending message...";
 
+        /* Send Email */
         emailjs.sendForm(
             "service_ojtu02h",
             "template_622z6ls",
             contactForm
         )
         .then(function() {
-
             formMessage.textContent =
                 "Thank you! Your message has been sent successfully.";
 
             contactForm.reset();
-
         })
         .catch(function(error) {
-
             formMessage.textContent =
                 "Sorry, something went wrong. Please try again.";
 
             console.log("EmailJS Error:", error);
-
         });
-
     });
-
 }
 
-
-// CONTACT - SCROLL REVEAL
-
-
+/* Contact Scroll Reveal */
 const contactSection = document.querySelector(".contact");
 
 if (contactSection) {
-
     const contactObserver = new IntersectionObserver(
         function(entries, observer) {
-
             entries.forEach(function(entry) {
-
                 if (entry.isIntersecting) {
-
                     contactSection.classList.add("contact-visible");
 
-                    // Run animation only once
+                    /* Run Animation Only Once */
                     observer.unobserve(contactSection);
                 }
-
             });
-
         },
         {
             threshold: 0.15
@@ -488,3 +453,4 @@ if (contactSection) {
 
     contactObserver.observe(contactSection);
 }
+
